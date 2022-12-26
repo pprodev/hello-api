@@ -6,7 +6,7 @@ on:
       - main
 defaults: # DO NOT INCLUDE
   run:
-    working-directory: ./ch2
+    working-directory: ./
 jobs:
   build:
     name: Build App
