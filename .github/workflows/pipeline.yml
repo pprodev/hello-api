@@ -2,22 +2,31 @@ name: CI Checks
 
 on:
   push:
-    branches: # <1>
+    branches:
       - main
-defaults: # DO NOT INCLUDE
-  run:
-    working-directory: ./
+
 jobs:
+  test:
+    name: Test Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go 1.x
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.19.4
+      - name: Check out code into the Go module directory #
+        uses: actions/checkout@v3
+      - name: Run tests
+        run: go test ./...
   build:
     name: Build App
     runs-on: ubuntu-latest #
+    needs: test
     steps:
-
       - name: Set up Go 1.x #
         uses: actions/setup-go@v3
         with:
           go-version: ^1.19.4
-
       - name: Check out code into the Go module directory #
         uses: actions/checkout@v3
 
