@@ -1,10 +1,8 @@
 name: CI Checks
-
 on:
   push:
     branches:
       - main
-
 jobs:
   test:
     name: Test Application
@@ -23,8 +21,8 @@ jobs:
       - name: Generate Report
         run: make report
       - name: Copy Files
-        run: | 
-              mkdir reports
+        run: |
+          mkdir  reports
           cp cover.html reports/.
       - name: Archive
         uses: actions/upload-artifact@v3
