@@ -95,12 +95,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-#      - id: auth
-#        uses: google-github-actions/auth@v1
-#        with:
-#          workload_identity_provider:
-#          service-account: hello-api@focused-actor-372816.iam.gserviceaccount.com
-#          credentials_json: ${{ secrets.gcp_credentials }}
+      - id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.gcp_credentials }}
       - name: Deploy function
         id: deploy
         uses: google-github-actions/deploy-cloud-functions@v1
@@ -108,7 +106,7 @@ jobs:
           name: translate
           entry_point: Translate
           runtime: go119
-          credentials: ${{ secrets.gcp_credentials }}
+          #credentials: ${{ secrets.gcp_credentials }}
           project_id: ${{ secrets.gcp_project_id }}
       - id: test
         run: curl "${{ steps.deploy.outputs.url }}/hello"
