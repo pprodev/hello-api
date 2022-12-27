@@ -97,7 +97,7 @@ jobs:
           fetch-depth: 0
       - name: Deploy function
         id: deploy
-        uses: google-github-actions/deploy-cloud-functions@main
+        uses: google-github-actions/deploy-cloud-functions@v1
         with:
           name: translate
           entry_point: Translate
@@ -117,7 +117,7 @@ jobs:
           fetch-depth: 0
       - name: Deploy App
         id: deploy
-        uses: google-github-actions/deploy-appengine@main
+        uses: google-github-actions/deploy-appengine@v1
         with:
           credentials: ${{ secrets.gcp_credentials }}
       - id: test
