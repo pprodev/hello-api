@@ -109,7 +109,7 @@ jobs:
           #credentials: ${{ secrets.gcp_credentials }}
           project_id: ${{ secrets.gcp_project_id }}
       - id: test
-        run: curl "${{steps.deploy.outputs.url }}/hello"
+        run: curl "${{ steps.deploy.outputs.url }}/hello"
   deploy-paas:
     name: Deploy PaaS
     runs-on: ubuntu-latest
