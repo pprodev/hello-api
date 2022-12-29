@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/pprodev/hello-api/handlers"
 	"github.com/pprodev/hello-api/handlers/rest"
+	"github.com/pprodev/hello-api/translation"
 	"log"
 	"net/http"
 	"os"
@@ -19,7 +20,9 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/translate/hello", rest.TranslateHandler)
+	translationService := translation.NewStaticService()
+	translateHandler := rest.NewTranslateHandler(translationService)
+	mux.HandleFunc("/translate/hello", translateHandler.TranslateHandler)
 	mux.HandleFunc("/health", handlers.HealthCheck)
 
 	log.Printf("listening on %s\n", addr)
