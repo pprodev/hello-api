@@ -4,6 +4,7 @@ setup:
 	install-go
 	init-go
 	install-lint
+	copy-hooks
 
 install-go:
 #	wget "https://golang.org/dl/go$(GO_VERSION).darwin-amd64.tar.gz"
@@ -38,3 +39,7 @@ build:
 
 install-lint:
 	sudo curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.50.1
+
+copy-hooks:
+	chmod +x scripts/hooks/*
+	cp -r scripts/hooks .git/.
