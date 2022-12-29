@@ -1,8 +1,10 @@
+// Package rest houses all rest handlers
 package rest
 
 import (
 	"encoding/json"
 	"github.com/pprodev/hello-api/translation"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -22,10 +24,14 @@ func TranslateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	word := strings.ReplaceAll(r.URL.Path, "/", "")
+
+	log.Printf("language set to %s, and word is set to %s", language, word)
+
 	wordTranslation := translation.Translate(word, language)
 
+	log.Printf("translation is %s", wordTranslation)
+
 	if wordTranslation == "" {
-		language = ""
 		w.WriteHeader(404)
 		return
 	}

@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
@@ -22,10 +23,20 @@ func main() {
 	mux.HandleFunc("/health", handlers.HealthCheck)
 
 	log.Printf("listening on %s\n", addr)
-	log.Fatal(http.ListenAndServe(addr, mux))
+	//log.Fatal(http.ListenAndServe(addr, mux))
+
+	srv := &http.Server{
+		Addr:              addr,
+		Handler:           mux,
+		ReadHeaderTimeout: 3 * time.Second,
+	}
+
+	if err := srv.ListenAndServe(); err != nil {
+		panic(err)
+	}
 }
 
-type Resp struct {
-	Language    string `json:"language"`
-	Translation string `json:"translation"`
-}
+//type Resp struct {
+//	Language    string `json:"language"`
+//	Translation string `json:"translation"`
+//}
