@@ -1,18 +1,18 @@
-// Package translation houses logic to take a given word and find it in a different language
+// Package translation houses logic to take a given word and find it in a different language.
 package translation
 
 import "strings"
 
-//StaticService has data that does not change
+// StaticService has data that does not change.
 type StaticService struct {
 }
 
-//NewStaticService creates a new instance of a service that uses static data
+// NewStaticService creates a new instance of a service that uses static data.
 func NewStaticService() *StaticService {
 	return &StaticService{}
 }
 
-//Translate a given word to another language
+// Translate a given word to another language.
 func (s *StaticService) Translate(word string, language string) string {
 	word = sanitizeInput(word)
 	language = sanitizeInput(language)

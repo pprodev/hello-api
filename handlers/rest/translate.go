@@ -1,4 +1,4 @@
-// Package rest houses all rest handlers
+// Package rest houses all rest handlers.
 package rest
 
 import (
@@ -17,7 +17,7 @@ type TranslateHandler struct {
 	service Translator
 }
 
-// NewTranslateHandler will create a new instance of the handler using a translation service
+// NewTranslateHandler will create a new instance of the handler using a translation service.
 func NewTranslateHandler(service Translator) *TranslateHandler {
 	return &TranslateHandler{
 		service: service,
