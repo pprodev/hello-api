@@ -3,6 +3,7 @@ package rest_test
 import (
 	"encoding/json"
 	"github.com/pprodev/hello-api/handlers/rest"
+	"github.com/pprodev/hello-api/translation"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -35,7 +36,8 @@ func TestTranslateAPI(t *testing.T) {
 		},
 	}
 
-	handler := http.HandlerFunc(rest.TranslateHandler)
+	underTest := rest.NewTranslateHandler(translation.NewStaticService())
+	handler := http.HandlerFunc(underTest.TranslateHandler)
 
 	for _, test := range tt {
 		rr := httptest.NewRecorder()
