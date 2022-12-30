@@ -3,11 +3,19 @@ package rest_test
 import (
 	"encoding/json"
 	"github.com/pprodev/hello-api/handlers/rest"
-	"github.com/pprodev/hello-api/translation"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
+
+type stubbedService struct{}
+
+func (s *stubbedService) Translate(word string, language string) string {
+	if word == "foo" {
+		return "bar"
+	}
+	return ""
+}
 
 func TestTranslateAPI(t *testing.T) {
 	tt := []struct {
@@ -17,26 +25,32 @@ func TestTranslateAPI(t *testing.T) {
 		ExpectedTranslation string
 	}{
 		{
-			Endpoint:            "/hello",
+			Endpoint:            "/foo",
 			StatusCode:          200,
 			ExpectedLanguage:    "english",
-			ExpectedTranslation: "hello",
+			ExpectedTranslation: "bar",
 		},
 		{
-			Endpoint:            "/hello?language=german",
+			Endpoint:            "/foo?language=german",
 			StatusCode:          200,
 			ExpectedLanguage:    "german",
-			ExpectedTranslation: "hallo",
+			ExpectedTranslation: "bar",
 		},
 		{
-			Endpoint:            "/hello?language=dutch",
+			Endpoint:            "/baz",
 			StatusCode:          404,
 			ExpectedLanguage:    "",
 			ExpectedTranslation: "",
 		},
+		{
+			Endpoint:            "/foo?language=GerMan",
+			StatusCode:          200,
+			ExpectedLanguage:    "german",
+			ExpectedTranslation: "bar",
+		},
 	}
 
-	underTest := rest.NewTranslateHandler(translation.NewStaticService())
+	underTest := rest.NewTranslateHandler(&stubbedService{})
 	handler := http.HandlerFunc(underTest.TranslateHandler)
 
 	for _, test := range tt {

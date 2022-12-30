@@ -39,6 +39,7 @@ func (t *TranslateHandler) TranslateHandler(w http.ResponseWriter, r *http.Reque
 		language = "english"
 	}
 
+	language = strings.ToLower(language)
 	word := strings.ReplaceAll(r.URL.Path, "/", "")
 
 	log.Printf("language set to %s, and word is set to %s", language, word)
