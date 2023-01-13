@@ -16,7 +16,7 @@ type RemoteService struct {
 	cache  map[string]string
 }
 
-// HelloClient will call external service
+// HelloClient will call external service.
 type HelloClient interface {
 	Translate(word, language string) (string, error)
 }
