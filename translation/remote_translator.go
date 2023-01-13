@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-// verify that the struct we are building satisfies the interface.this will cause a compile time error if not satisfied
+// verify that the struct we are building satisfies the interface.this will cause a compile time error if not satisfied.
 var _ rest.Translator = &RemoteService{}
 
-// RemoteService will allow for external calls to existent service for translations
+// RemoteService will allow for external calls to existent service for translations.
 type RemoteService struct {
 	client HelloClient
 	cache  map[string]string
@@ -21,7 +21,7 @@ type HelloClient interface {
 	Translate(word, language string) (string, error)
 }
 
-// NewRemoteService creates a new implementation of RemoteService
+// NewRemoteService creates a new implementation of RemoteService.
 func NewRemoteService(client HelloClient) *RemoteService {
 	return &RemoteService{
 		client: client,
@@ -29,7 +29,7 @@ func NewRemoteService(client HelloClient) *RemoteService {
 	}
 }
 
-// Translate will take a given word and try to find the result using the client
+// Translate will take a given word and try to find the result using the client.
 func (s *RemoteService) Translate(word string, language string) string {
 	word = strings.ToLower(word)
 	language = strings.ToLower(language)
