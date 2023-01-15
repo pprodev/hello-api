@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
@@ -16,7 +16,7 @@ type APIClient struct {
 	endpoint string
 }
 
-// NewHelloClient creates instance of client with a given endpoint
+// NewHelloClient creates instance of client with a given endpoint.
 func NewHelloClient(endpoint string) *APIClient {
 	return &APIClient{
 		endpoint: endpoint,
@@ -49,8 +49,13 @@ func (c *APIClient) Translate(word, language string) (string, error) {
 		return "", errors.New("error in api")
 	}
 
-	b, _ = ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
+	b, _ = io.ReadAll(resp.Body)
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}(resp.Body)
 
 	var m map[string]interface{}
 	if err := json.Unmarshal(b, &m); err != nil {

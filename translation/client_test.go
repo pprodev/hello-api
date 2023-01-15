@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"io"
-	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -37,8 +37,13 @@ func (suite *HelloClientSuite) SetupSuite() {
 	suite.mockServerService = new(MockService)
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		b, _ := ioutil.ReadAll(r.Body)
-		defer r.Body.Close()
+		b, _ := io.ReadAll(r.Body)
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+				log.Println(err)
+			}
+		}(r.Body)
 
 		var m map[string]interface{}
 		_ = json.Unmarshal(b, &m)
