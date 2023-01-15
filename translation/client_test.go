@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -38,12 +37,9 @@ func (suite *HelloClientSuite) SetupSuite() {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		b, _ := io.ReadAll(r.Body)
-		defer func(Body io.ReadCloser) {
-			err := Body.Close()
-			if err != nil {
-				log.Println(err)
-			}
-		}(r.Body)
+		defer func(r *http.Request) {
+			_ = r.Body.Close()
+		}(r)
 
 		var m map[string]interface{}
 		_ = json.Unmarshal(b, &m)
@@ -54,10 +50,12 @@ func (suite *HelloClientSuite) SetupSuite() {
 		resp, err := suite.mockServerService.Translate(word, language)
 		if err != nil {
 			http.Error(w, "error", 500)
+			return
 		}
 
 		if resp == "" {
 			http.Error(w, "missing", 404)
+			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
@@ -68,6 +66,10 @@ func (suite *HelloClientSuite) SetupSuite() {
 	mux.HandleFunc("/", handler)
 	suite.server = httptest.NewServer(mux)
 	suite.underTest = translation.NewHelloClient(suite.server.URL)
+}
+
+func (suite *HelloClientSuite) SetupTest() {
+	suite.mockServerService = new(MockService)
 }
 
 func (suite *HelloClientSuite) TearDownSuite() {
